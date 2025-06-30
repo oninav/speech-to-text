@@ -1,0 +1,93 @@
+[
+  {
+    "objectID": "NLP Speech.html#speech-to-text-conversion",
+    "href": "NLP Speech.html#speech-to-text-conversion",
+    "title": "",
+    "section": "Speech-to-Text Conversion",
+    "text": "Speech-to-Text Conversion\nTechniques, Tools, and Trade-offs\nOmkar Ninav\nJune 30, 2025\n\nGood [morning/afternoon], thank you for taking the time to attend this presentation.\nThe goal today is to give a structured and technical overview of speech-to-text conversion — how it works, what tools and models are currently leading the field, and what trade-offs are involved in choosing a particular solution.\nThis is a technology that’s become foundational in a wide range of domains — from customer support and assistive tech, to real-time captioning and voice interfaces. I’ll be focusing on how Python-based tools like Whisper, Wav2Vec2, and others can be used to build robust STT systems.\nBy the end, I hope to outline clearly: - How the core pipeline functions, - Which models are best suited for various use cases, and - What the cost and accuracy implications are — especially in terms of practical deployment.\nLet’s begin with the basics."
+  },
+  {
+    "objectID": "NLP Speech.html#what-is-speech-to-text",
+    "href": "NLP Speech.html#what-is-speech-to-text",
+    "title": "",
+    "section": "What is Speech-to-Text?",
+    "text": "What is Speech-to-Text?\n\nConverts spoken language into written text\nAlso known as Automatic Speech Recognition (ASR)\nUsed in applications like:\n\nVirtual assistants (e.g., Siri, Alexa)\nCaptioning & subtitling\nMeeting transcription\nVoice commands\n\n\n\nSpeech-to-text, also called Automatic Speech Recognition or ASR, is the process of converting human speech into readable, written text.\nAt a high level, it’s the core technology behind systems like Siri, Alexa, Google Assistant, and any app that takes voice input.\nBeyond virtual assistants, it’s widely used in live captioning, automated meeting transcription, voice commands in smart devices, and even accessibility tools for people with disabilities.\nIn recent years, thanks to deep learning and advances in compute power, STT systems have become far more accurate and accessible — even for developers like us working with open-source tools.\nIn the next slide, I’ll walk through the high-level architecture of how speech-to-text systems are typically designed."
+  },
+  {
+    "objectID": "NLP Speech.html#how-speech-to-text-works",
+    "href": "NLP Speech.html#how-speech-to-text-works",
+    "title": "",
+    "section": "How Speech-to-Text Works",
+    "text": "How Speech-to-Text Works\n\nAudio Input\nVoice signal captured from a microphone or file\nFeature Extraction\nConverts raw audio into numerical features (e.g., MFCCs, spectrograms)\nAcoustic Model\nMaps features to phonemes or characters using ML/DL models\nLanguage Model\nPredicts word sequences for context-aware transcription\nDecoder\nAligns acoustic and language models to produce final text\n\n\n\n\n\n\nflowchart LR\n  A[Audio Input&lt;br/&gt;Voice signal] --&gt; B[Feature Extraction&lt;br/&gt;MFCCs / Spectrograms]\n  B --&gt; C[Acoustic Model&lt;br/&gt;ML/DL-based]\n  C --&gt; D[Language Model&lt;br/&gt;Contextual Prediction]\n  D --&gt; E[Decoder&lt;br/&gt;Final Text Output]\n\n\n\n\n\n\n\nThis slide breaks down the standard architecture behind most modern speech-to-text systems.\nIt starts with the audio input, typically a microphone recording or audio file, which is passed to a feature extraction module. This module transforms the raw waveform into meaningful patterns — usually through methods like MFCCs (Mel-Frequency Cepstral Coefficients) or spectrograms.\nNext, the acoustic model interprets these features and maps them to likely phonemes or character sequences. Traditionally, these were HMM-based, but today they’re often deep neural networks like CNNs, RNNs, or transformers.\nThe language model plays a critical role — it uses linguistic context to predict the most likely word sequences. This is what helps the system understand the difference between similar-sounding phrases like “ice cream” vs “I scream.”\nFinally, the decoder combines all of this — the acoustic predictions and the language probabilities — to produce the final transcription.\nUnderstanding this pipeline helps clarify where different models and libraries fit in, and what we can tweak based on accuracy, speed, or deployment constraints."
+  },
+  {
+    "objectID": "NLP Speech.html#techniques-traditional-asr",
+    "href": "NLP Speech.html#techniques-traditional-asr",
+    "title": "",
+    "section": "Techniques: Traditional ASR",
+    "text": "Techniques: Traditional ASR\n\nHMMs + GMMs\nEarly models for mapping acoustic features to phonemes\nn-gram Language Models\nPredict word sequences based on prior word probabilities\nFeature Extraction (MFCCs)\nConverts raw audio into spectral features\n\n\nLet’s start with traditional ASR systems.\nEarly speech recognition was built using Hidden Markov Models (HMMs) and Gaussian Mixture Models (GMMs). HMMs model the sequential nature of speech, and GMMs handle the probability distributions of acoustic features within each state.\nFor predicting the next word or phrase, systems used n-gram language models — for example, a trigram model would look at the two previous words to estimate the next one. These models were easy to implement but had limited ability to understand context or long-term dependencies.\nThe front end of these systems used MFCCs (Mel-Frequency Cepstral Coefficients) to convert audio waveforms into feature vectors that captured the shape and tone of the speech signal. MFCCs remain popular even in some deep learning systems due to their compact and informative representation of sound.\nWhile these traditional methods laid the foundation for modern ASR, they struggled with complex variations like accents, overlapping speakers, and noisy environments."
+  },
+  {
+    "objectID": "NLP Speech.html#techniques-deep-learning-modern-trends",
+    "href": "NLP Speech.html#techniques-deep-learning-modern-trends",
+    "title": "",
+    "section": "Techniques: Deep Learning & Modern Trends",
+    "text": "Techniques: Deep Learning & Modern Trends\n\nRNNs, CNNs, Transformers\nDeep models for sequence modeling and attention\nEnd-to-End Models (CTC / Attention)\nLearn transcription directly from audio input\nTrends\n\nSelf-supervised learning (e.g. Wav2Vec 2.0)\nMultilingual support (e.g. Whisper)\nOn-device inference (edge devices, mobile)\n\n\n\nModern speech recognition systems have shifted toward deep learning.\nInitially, Recurrent Neural Networks (RNNs) were used because they could model sequences — perfect for speech. Then came Convolutional Neural Networks (CNNs) to handle time-frequency patterns in audio. Today, transformers are dominant due to their superior performance in modeling long-range dependencies and context.\nInstead of breaking the process into multiple modules like traditional ASR, deep learning systems often use end-to-end models. These can be trained to map directly from raw audio to text using techniques like Connectionist Temporal Classification (CTC) or attention-based models.\nRecent trends in STT are pushing the field even further: - Self-supervised learning enables models like Wav2Vec 2.0 to learn from raw, unlabeled audio — drastically reducing the need for costly transcriptions. - Models like Whisper offer multilingual support and are robust to accents and background noise. - There’s also growing interest in on-device inference, where models are small and efficient enough to run on phones, edge devices, or embedded systems — ensuring both privacy and speed.\nThese modern techniques make STT more accurate, scalable, and accessible than ever before."
+  },
+  {
+    "objectID": "NLP Speech.html#python-libraries-for-speech-to-text-12",
+    "href": "NLP Speech.html#python-libraries-for-speech-to-text-12",
+    "title": "",
+    "section": "Python Libraries for Speech-to-Text (1/2)",
+    "text": "Python Libraries for Speech-to-Text (1/2)\n\nWhisper (OpenAI)\n\nTransformer-based, multilingual\nHigh accuracy, runs offline\n\nSpeechRecognition\n\nSimple API wrapper for Google, IBM, etc.\nEasy for beginners\n\nWav2Vec 2.0 (Hugging Face)\n\nPretrained self-supervised models\nHigh-quality transcriptions\n\n\n\nThis slide introduces three powerful Python tools used in speech-to-text development.\nWhisper is one of the best-performing open-source models available. It supports multilingual audio, works offline, and is robust to noise and accents. It does require a decent GPU, but the results are exceptional.\nSpeechRecognition is simple and wraps around cloud APIs like Google or IBM Watson. It’s great for quick demos or for beginners but is not suitable for offline or secure environments.\nWav2Vec 2.0 is built by Meta and available on Hugging Face. It’s transformer-based, pre-trained on massive audio corpora, and can deliver near state-of-the-art accuracy, especially on clean English audio."
+  },
+  {
+    "objectID": "NLP Speech.html#python-libraries-for-speech-to-text-22",
+    "href": "NLP Speech.html#python-libraries-for-speech-to-text-22",
+    "title": "",
+    "section": "Python Libraries for Speech-to-Text (2/2)",
+    "text": "Python Libraries for Speech-to-Text (2/2)\n\nDeepSpeech (Mozilla)\n\nLightweight and fast\nLess accurate on noisy inputs\n\nKaldi (via PyKaldi)\n\nResearch-grade toolkit\nSteeper learning curve\n\n\n\nDeepSpeech, from Mozilla, was designed for simplicity and edge deployment. It’s fast and easy to install, but less accurate in noisy or real-world conditions compared to newer models.\nKaldi is a highly flexible and powerful toolkit often used in academia or enterprise. It offers full control over the speech recognition pipeline, including acoustic and language models. However, it’s not beginner-friendly and requires significant setup effort. The Python wrapper PyKaldi helps but still demands technical depth.\nSplitting the content across two slides avoids overcrowding and gives us room to discuss each tool more clearly."
+  },
+  {
+    "objectID": "NLP Speech.html#model-comparison-features-at-a-glance",
+    "href": "NLP Speech.html#model-comparison-features-at-a-glance",
+    "title": "",
+    "section": "Model Comparison: Features at a Glance",
+    "text": "Model Comparison: Features at a Glance\n\n\n\n\n\n\n\n\n\n\n\nModel\nAccuracy\nOffline\nMultilingual\nEase of Use\nCost\n\n\n\n\nWhisper\n✅✅✅\n✅\n✅✅✅\n✅✅\nFree\n\n\nWav2Vec 2.0\n✅✅\n✅\n⚠️ (mostly English)\n✅\nFree\n\n\nGoogle API\n✅✅✅\n❌\n✅✅✅\n✅✅✅\nPaid\n\n\nDeepSpeech\n✅\n✅\n❌\n✅✅\nFree\n\n\nKaldi\n✅✅\n✅\n✅ (with effort)\n⚠️ Complex\nFree\n\n\n\n\nThis table summarizes the strengths and limitations of some of the most widely used speech-to-text models and toolkits.\nStarting with Whisper, it stands out as a balanced option — it offers high accuracy, works offline, supports multiple languages, and is open-source. It does require a decent GPU to run efficiently, especially for long audio files or real-time use, but it’s very accessible for developers and teams with modest resources.\nWav2Vec 2.0 is another excellent option. It provides high accuracy, especially when fine-tuned on domain-specific data. However, it’s primarily trained on English datasets, so multilingual support is more limited unless you retrain it. It’s open-source and can be accessed via Hugging Face.\nGoogle Speech-to-Text API is a commercial solution. It offers very high accuracy and supports over 100 languages. It’s excellent for real-time use cases and scales easily. However, it’s not free — the cost is around $1.44 per hour, and it requires internet connectivity, which may raise privacy concerns in sensitive environments.\nDeepSpeech was designed to be lightweight and fast, making it suitable for edge devices. That said, it has started to lag behind in terms of accuracy, especially on noisy or accented inputs, and its development has slowed down in recent years.\nKaldi is extremely powerful and flexible. It’s used in many academic and enterprise applications where low-level control is needed — for instance, custom language models, speaker adaptation, and complex pipelines. However, it’s not beginner-friendly, and the learning curve is steep. PyKaldi can help if you want to work with it in Python.\nThis slide helps us decide which model might be most appropriate depending on our project constraints — whether we prioritize cost, offline access, multilingual support, or ease of use.\nIn the next slide, we’ll break down the cost aspect more specifically, including free tiers and usage pricing for cloud APIs."
+  },
+  {
+    "objectID": "NLP Speech.html#cost-open-source-models",
+    "href": "NLP Speech.html#cost-open-source-models",
+    "title": "",
+    "section": "Cost: Open-Source Models",
+    "text": "Cost: Open-Source Models\n\n\n\nModel\nCost\nOffline Use\nCloud Required\n\n\n\n\nWhisper\nFree (Open Source)\n✅\n❌\n\n\nWav2Vec 2.0\nFree (Open Source)\n✅\n❌\n\n\nDeepSpeech\nFree (Open Source)\n✅\n❌\n\n\nKaldi\nFree (Open Source)\n✅\n❌\n\n\n\n\nAll of these models are completely free and can run offline. This gives us full control over the transcription pipeline, which is useful for privacy-sensitive environments or when working with large amounts of audio data.\nWhisper is the most accurate among these and works well out of the box. Wav2Vec 2.0 is also strong, especially with fine-tuning. DeepSpeech is lightweight but older, and Kaldi offers research-grade customization — though with a steep learning curve.\nThe key point here is: these tools have no recurring costs and no internet dependency — ideal for secure or offline environments."
+  },
+  {
+    "objectID": "NLP Speech.html#cost-cloud-apis",
+    "href": "NLP Speech.html#cost-cloud-apis",
+    "title": "",
+    "section": "Cost: Cloud APIs",
+    "text": "Cost: Cloud APIs\n\n\n\n\n\n\n\n\n\nService\nApprox. Cost\nOffline Use\nCloud Required\n\n\n\n\nGoogle Speech API\n~$1.44 per hour\n❌\n✅\n\n\nAWS Transcribe\n~$1.44 per hour\n❌\n✅\n\n\nAzure Speech\n~$1.60 per hour\n❌\n✅\n\n\n\n\nCloud APIs offer high performance and easy integration, but they come at a cost.\nThese services typically charge around $1.44 to $1.60 per hour of audio processed. The pricing is usually pay-as-you-go, and may include limited free tiers initially.\nThey are useful for real-time transcription, multi-language support, and when we don’t want to manage infrastructure ourselves.\nHowever, they require internet access, and data is transmitted to external servers, which might raise privacy or compliance concerns.\nSo while cloud APIs are powerful, we need to carefully evaluate whether the convenience justifies the ongoing cost and cloud dependency."
+  },
+  {
+    "objectID": "NLP Speech.html#cost-summary-recommendation",
+    "href": "NLP Speech.html#cost-summary-recommendation",
+    "title": "",
+    "section": "Cost – Summary & Recommendation",
+    "text": "Cost – Summary & Recommendation\n\nOpen-Source Models (Whisper, Wav2Vec, etc.)\n\n✅ Free and offline\n⚠️ Require setup and local resources\n\nCloud APIs (Google, AWS, Azure)\n\n✅ Easy to use, scalable\n⚠️ Ongoing cost and privacy trade-offs\n\n\n✔️ Recommendation:\nUse Whisper or Wav2Vec 2.0 for local, cost-effective transcription\nUse Cloud APIs only for real-time or highly multilingual needs\n\nTo summarize, open-source models like Whisper and Wav2Vec are ideal when we want a free, offline, and private solution. They do require more local compute and some initial setup, but the cost savings and control can be significant — especially for batch processing or secure applications.\nCloud APIs are best suited when we need real-time transcription, scalability, or support for multiple languages out of the box. However, they incur ongoing costs and may raise data privacy issues.\nFor most internal use cases or offline processing, Whisper offers the best trade-off. For external client-facing products, cloud APIs can be considered with proper cost tracking."
+  },
+  {
+    "objectID": "NLP Speech.html#conclusion-summary",
+    "href": "NLP Speech.html#conclusion-summary",
+    "title": "",
+    "section": "Conclusion & Summary",
+    "text": "Conclusion & Summary\n\nSTT is a mature, versatile technology\nOpen-source tools (Whisper, Wav2Vec) offer high quality with no cost\nCloud APIs provide convenience but incur recurring costs\nModel choice depends on:\n✅ Accuracy\n✅ Cost\n✅ Deployment constraints\n✅ Privacy needs\n\n✔️ Recommended:\nUse Whisper for secure, offline transcription\nUse cloud APIs only where real-time & scalability are critical\n\nTo wrap up:\nSpeech-to-text is now a reliable and accessible technology, with options for both local and cloud-based use cases. Open-source models like Whisper and Wav2Vec 2.0 offer high performance without licensing fees, making them excellent choices for internal tools or data-sensitive applications.\nCloud APIs are valuable when speed, scale, or language diversity is essential — but they should be weighed against cost and privacy considerations.\nUltimately, the choice depends on our project’s priorities — whether that’s minimizing cost, protecting data, supporting real-time use, or ensuring high accuracy.\nThank you."
+  },
+  {
+    "objectID": "NLP Speech.html#thank-you",
+    "href": "NLP Speech.html#thank-you",
+    "title": "",
+    "section": "Thank You!",
+    "text": "Thank You!\nQuestions? Suggestions?\n🔗 View this presentation on GitHub:\nPresented by Omkar Ninav — June 2025\n\nThank you for your attention! I’m happy to take questions, discuss possible use cases for STT in our workflows, or explore ways we can experiment with tools like Whisper in-house.\nThe full slide deck and source code are available on GitHub for review, reuse, or contributions.\n\n\n\n\nInternal Use Only | Not For Redistribution"
+  }
+]
