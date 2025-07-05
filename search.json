@@ -77,6 +77,55 @@
     "text": "Cost – Summary & Recommendation\n\nOpen-Source Models (Whisper, Wav2Vec, etc.)\n\n✅ Free and offline\n⚠️ Require setup and local resources\n\nCloud APIs (Google, AWS, Azure)\n\n✅ Easy to use, scalable\n⚠️ Ongoing cost and privacy trade-offs\n\n\n✔️ Recommendation:\nUse Whisper or Wav2Vec 2.0 for local, cost-effective transcription\nUse Vosk for light, multilingual offline STT (e.g. edge devices)\nUse Cloud APIs only for real-time or highly multilingual needs\n\nTo summarize, open-source models like Whisper and Wav2Vec are ideal when we want a free, offline, and private solution. They do require more local compute and some initial setup, but the cost savings and control can be significant — especially for batch processing or secure applications.\nCloud APIs are best suited when we need real-time transcription, scalability, or support for multiple languages out of the box. However, they incur ongoing costs and may raise data privacy issues.\nFor most internal use cases or offline processing, Whisper offers the best trade-off. For external client-facing products, cloud APIs can be considered with proper cost tracking."
   },
   {
+    "objectID": "NLP Speech.html#final-decision",
+    "href": "NLP Speech.html#final-decision",
+    "title": "",
+    "section": "✅ Final Decision",
+    "text": "✅ Final Decision\nChosen Model: openai/whisper-medium\n🔹 Why Whisper Medium?\n\n✅ Good balance between accuracy and inference speed\n✅ Lower VRAM & compute requirements than large models\n✅ Suitable for local deployment (runs on RTX 4050)\n✅ Consistent performance across test cases\n✅ Robust to mild accents and moderate background noise\n\n🔸 Not Chosen:\n\nwhisper-large: Higher accuracy but heavier (more VRAM)\nwhisper-tiny / base: Faster, but less accurate\n\n\nAfter testing several models, we’ve decided to go with Whisper Medium.\nIt provides a strong balance between accuracy and speed, especially on a GPU like RTX 4050. While the large model performed slightly better in accuracy, its inference time and GPU memory use were significantly higher — which isn’t ideal for our production use.\nThe tiny and base models were faster, but dropped too much in transcription quality, especially for longer or more technical audio.\nWhisper Medium gives us consistent results and can run fully offline, which fits both our deployment and privacy goals. It’s the best fit given our constraints and performance requirements."
+  },
+  {
+    "objectID": "NLP Speech.html#transcript-evaluation-whisper-vs-original",
+    "href": "NLP Speech.html#transcript-evaluation-whisper-vs-original",
+    "title": "",
+    "section": "📝 Transcript Evaluation – Whisper vs Original",
+    "text": "📝 Transcript Evaluation – Whisper vs Original\n🎙️ Sample: NPTEL Lecture – Literature History\n📌 Original:\n&gt; At the outset, this being the first session, it is very important to give an overview of the course. This course is spread over 12 weeks and we may have 30 hours of teaching involved in this. Let me also introduce you to the objectives of this course so that the intentions become clearer.\n🌀 Whisper Output:\n&gt; At the outset, this being the first session, it is very important to give an overview of the course. This course is spread over 12 weeks and we may have 30 hours of teaching involved in this and we also introduce you to the objectives of this course so that the intentions become more clear.\n🔹 ✅ Core content retained\n🔹 ⚠️ Minor stylistic variation – rephrasing & joined sentences"
+  },
+  {
+    "objectID": "NLP Speech.html#section",
+    "href": "NLP Speech.html#section",
+    "title": "",
+    "section": "",
+    "text": "🧠 Observation Summary\n\nWhisper captured all key points with high fidelity\nPunctuation differences due to lack of postprocessing\nFiller words (“we also”) inserted naturally from speech\nIdeal for lecture summarization, accessibility, or note generation\n\n\nIn this real-world evaluation using an NPTEL lecture, Whisper accurately transcribed complex academic content, maintaining meaning and structure.\nThe differences observed are stylistic, not factual. Punctuation is less formal, and there’s a natural flow of spoken language like “we also introduce…” instead of “Let me also introduce…”\nThis shows that Whisper is reliable for lecture or classroom transcription, even in moderately accented or Indian English speech. It preserves intent and phrasing even with unedited audio input."
+  },
+  {
+    "objectID": "NLP Speech.html#whisper-accuracy",
+    "href": "NLP Speech.html#whisper-accuracy",
+    "title": "",
+    "section": "📊 Whisper Accuracy",
+    "text": "📊 Whisper Accuracy\n🔹 Quantitative Evaluation\n\nSemantic Similarity (cosine): 0.9766 ✅\nROUGE-1 F1 Score: 0.9714\n\nROUGE-L F1 Score: 0.9524\n\nWord Error Rate (WER): 12.43%\n\n🔍 Interpretation\n\n✅ Very high semantic match – meaning fully preserved\n\n✅ Low WER – minor word-level issues\n\n✅ ROUGE scores confirm strong overlap in phrase structure\n\n⚠️ Differences mostly in punctuation, filler words, and phrasing\n\n\nIn this test, Whisper Medium showed outstanding performance on an NPTEL academic lecture.\nA semantic similarity score of 0.9766 indicates that the transcript preserves nearly all the original meaning. ROUGE-1 and ROUGE-L scores also reflect strong overlap in vocabulary and sentence structure.\nThe Word Error Rate is just 12.43%, which is excellent for real-world speech and unedited audio.\nWhisper handled Indian English fluently, captured the instructional tone well, and only struggled with minor phrasing and punctuation.\nThis confirms Whisper’s suitability for academic transcription, content indexing, and lecture summarization tasks."
+  },
+  {
+    "objectID": "NLP Speech.html#transcript-comparison-whisper-vs-original",
+    "href": "NLP Speech.html#transcript-comparison-whisper-vs-original",
+    "title": "",
+    "section": "📝 Transcript Comparison – Whisper vs Original",
+    "text": "📝 Transcript Comparison – Whisper vs Original\n🎙️ Sample: NPTEL Lecture – Taylor Series Intro\n📌 Original:\n&gt; Welcome back to the lectures on Engineering Mathematics-I.\n&gt; Today, we will learn Taylor’s Polynomial and Taylor Series.\n🌀 Whisper Output:\n&gt; Hi, welcome back to the lectures on Engineering Mathematics I and today’s we will learn Taylor’s polynomial and Taylor series.\n🔹 ✅ Core message preserved\n🔹 Minor changes:\n- Added “Hi”\n- “today’s we” instead of “today we”\n- Punctuation differences only"
+  },
+  {
+    "objectID": "NLP Speech.html#section-1",
+    "href": "NLP Speech.html#section-1",
+    "title": "",
+    "section": "",
+    "text": "🎙️ Sample: Exponential Function Example\n📌 Original:\n&gt; The polynomial of degree 0 will simply be 1.\n&gt; If we plot this, it’s the green line through the point (0, 1).\n🌀 Whisper Output:\n&gt; So, the polynomial of degree 0 will be simply 1 and if we plot this. So, this is the green plot here of the exponential function and this polynomial of degree 0 is just a constant line. So, the straight line going through this 0 1 point.\n🔹 ✅ Richer phrasing from audio\n🔹 Whisper added spontaneous repetitions and fillers (“so”, “here”)\n🔹 All technical meaning retained\n\nThese examples show that Whisper Medium provides a high-fidelity transcription of spoken technical content.\nIn the first clip, it added a conversational “Hi” and reordered “today’s we” — a typical STT quirk, but the meaning is perfectly preserved.\nIn the second clip, Whisper captured additional spoken context and filler words like “so,” which were omitted in the polished text. Still, the math-specific phrasing and structure — like “degree 0 polynomial” and “point (0, 1)” — were accurate.\nOverall, Whisper handled clear, structured academic English very well, even in continuous lecture format."
+  },
+  {
+    "objectID": "NLP Speech.html#whisper-accuracy-1",
+    "href": "NLP Speech.html#whisper-accuracy-1",
+    "title": "",
+    "section": "📊 Whisper Accuracy",
+    "text": "📊 Whisper Accuracy\n🔹 Quantitative Evaluation\n\nSemantic Similarity (cosine): 0.8882\n\nROUGE-1 F1 Score: 0.9116\n\nROUGE-L F1 Score: 0.8913\n\nWord Error Rate (WER): 26.33%\n\n🔍 Interpretation\n\n✅ Meaning mostly preserved, despite phrasing variation\n\n⚠️ Slight drop in surface-level overlap (function words, rewording)\n\n⚠️ Higher WER due to longer output and added filler words\n\n\nIn this earlier test, Whisper Medium still performed well, but not as strongly as in the second test.\nThe semantic similarity score of 0.8882 indicates that the transcript largely matched the original in meaning — even though phrasing and filler words may differ.\nROUGE scores are also strong, though slightly lower, likely because Whisper introduced additional spoken-style elements like filler words and partial repetitions that were not in the polished reference transcript.\nThe Word Error Rate of 26.33% is higher, but most errors were minor — missing function words, punctuation, or changes in word order — rather than major content issues.\nThis reflects Whisper’s tendency to follow real speech patterns closely, which may differ from cleaned-up transcripts."
+  },
+  {
     "objectID": "NLP Speech.html#conclusion-summary",
     "href": "NLP Speech.html#conclusion-summary",
     "title": "",
